@@ -9,3 +9,8 @@ A tool to optimize virtual machines before provisioning.
 - Automatically resets RDS grace period timebomb.
 - Clears DNS- and Group Policy cache.
 - Automatically disables tasks and services.
+
+## Disclaimer
+Please note that this is a work-in-progress.
+
+You will find bloated code and unnecessary/unused code and comments.

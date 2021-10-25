@@ -10,6 +10,18 @@ A tool to optimize virtual machines before provisioning.
 - Clears DNS- and Group Policy cache.
 - Automatically disables tasks and services.
 
+## Preview
+PrepServer takes up the whole screen. **To exit, hit '_shift + alt + Q_'**.
+
+![image](https://user-images.githubusercontent.com/93126880/138739598-35ec9090-ecd0-481d-96a2-112d0e3aaa6c.png)
+
+![image](https://user-images.githubusercontent.com/93126880/138739641-4b23bc25-779b-46a3-8878-c61306f03bcf.png)
+
+A pending reboot was detected, and a countdown runs before rebooting.
+Again, use the hotkey to exit.
+
+If Autologon info is found in 'Config.ini', this will be written to the registry and used to sign in automatically after reboot.
+
 ## Disclaimer
 Please note that this is a work-in-progress.
 

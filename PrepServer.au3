@@ -25,7 +25,6 @@ Opt("TrayAutoPause", 0)
 #cs ============================================================================================
 
 	Author:			André Saga Lande
-	E-mail:			andre.saga.lande@gmail.com
 
 	Description:	PrepServer is a tool used to help maintain and optimize Windows terminal servers.
 					Especially useful for Citrix Provisioning and Machine Creation Services.
@@ -37,27 +36,12 @@ Opt("TrayAutoPause", 0)
 	* 	Improved
 	! 	Important
 
+
 	TODO
-	+	Update-funksjon: Sjekk etter oppdatering. Sammenligne exe med nåværende og exe på filserver. Filsti i config ini.
-	+	Sjekk C:\Temp for store filer. Gi mulighet for å slette disse filene enten manuelt under PrepServer eller automatisk.
-	+	Registry
-			+ reg delete autorun values
-			+ reg delete runonce for autologon!
-	+	System Health report
-	+	Silent change user ved logon. Bruk Run i registeret.
-	+	Change user /install & /execute
-	+	Se om VM er MCS. Gi varsel dersom MAK finnes
-	+	Config-file integrity
-		- Check if any lines have been deleted or wrongly edited. Fix mistakes made.
-	+	Shortcuts
-		+ Create shortcuts on the public desktop for all the handy tools
-		+ Create change user scripts on the desktop
+
 
 	RELEASE NOTES
-	2.0.0.76
-	§	Line 1000
-		- After: ElseIf $InstallDateIndex > 0 Then
-		- Before: ElseIf $InstallDateIndex >= 0 Then
+
 
 #ce ============================================================================================
 
@@ -168,7 +152,7 @@ Opt("TrayAutoPause", 0)
 
 
 #Region		;	HOTKEYS
-	
+
 	HotKeySet("+!q", "_Abort")
 
 #EndRegion	; > HOTKEYS
@@ -179,7 +163,7 @@ Opt("TrayAutoPause", 0)
 ;   SCRIPT ACTUAL START
 
 #Region		;	INITIALIZE
-	
+
 	Initialize()
 	Func Initialize()
 		_BlockInputEx(3, "", "{LCTRL}|{LWIN}|{RWIN}")
@@ -229,7 +213,7 @@ Opt("TrayAutoPause", 0)
 				If Not @error Then _FileWriteLog($Log, "[INFO] Password successfully written to 'Config.ini'.")
 			_UpdateConfig("AutoLogon", "PasswordEncrypted", "True")
 		EndIf
-		
+
 		; CHECK OS BIT-VERSION
 		If Not StringInStr(@OSArch, "X64") Then $HKLM = StringReplace($HKLM, "HKEY_LOCAL_MACHINE64", "HKEY_LOCAL_MACHINE")
 
@@ -263,7 +247,7 @@ Opt("TrayAutoPause", 0)
 				_FileWriteLog($Log, "vDisk: " & @TAB & @TAB & $vDisk)
 				If $vDisk_CacheType = $vDisk_Type_ReadWrite Then
 					_FileWriteLog($Log, "Type: " & @TAB & @TAB & "Read/Write Version")
-					
+
 				ElseIf $vDisk_CacheType = $vDisk_Type_Private Then
 					_FileWriteLog($Log, "Type: " & @TAB & @TAB & "Private Read/Write")
 				ElseIf $vDisk_CacheType = $vDisk_Type_Read Then
@@ -309,7 +293,7 @@ Opt("TrayAutoPause", 0)
 		_FileCreate($Config)
 		If Not @error Then
 			$hFileOpen = FileOpen($Config, $FO_APPEND)
-			
+
 			FileWrite($Config, "====================================" & @CRLF)
 			FileWrite($Config, "====== PrepServer config file ======" & @CRLF)
 			FileWrite($Config, "====================================" & @CRLF)
@@ -369,7 +353,7 @@ Opt("TrayAutoPause", 0)
 		Local $Count = 0
 
 		_FileWriteLog($Log, "[INFO] Reading config: " & $Config)
-		
+
 		$AutoLogonEnabled = IniRead($Config, "AutoLogon", "Enabled", "N/A")
 			If Not @error Then $Count += 1
 		$AutoLogonUserName = IniRead($Config, "AutoLogon", "Username", "N/A")
@@ -425,7 +409,7 @@ Opt("TrayAutoPause", 0)
 
 #EndRegion	; > CONFIG
 #Region		;	PREP SERVER
-	
+
 	Func PrepServer()
 		#Region ;	GUI
 			Local $Counter = $ExitTimer
@@ -487,7 +471,7 @@ Opt("TrayAutoPause", 0)
 				_GIF_DeleteGIF($hGIF)
 				_Reboot()
 			EndIf
-			
+
 			; KMS
 			If $MustBeLicensedWithKMS = "True" Then
 				GUICtrlSetData($LABEL_StatusText, "Checking Windows License")
@@ -728,7 +712,7 @@ Opt("TrayAutoPause", 0)
 		Dim $Permissions[1][3] = [[$AdminGroup, 1, $GENERIC_ALL]]
 
 		_FileWriteLog($Log, "[INFO] Removing Registration Entries...")
-	
+
 		; RDS GRACE PERIOD TIMEBOMB
 		_FileWriteLog($Log, "[INFO] Looking for Remote Desktop Grace Period data...")
 		$GracePeriod = _RegEnumKeyEx($REG_RDS_RCM, 0, "GracePeriod")
@@ -759,7 +743,7 @@ Opt("TrayAutoPause", 0)
 			EndIf
 		EndIf
 	EndFunc
-	
+
 	Func _EditReg()
 		Local $REG_FW_POL = $HKLM & "\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy"
 		;DeleteUserAppContainersOnLogoff
@@ -781,7 +765,7 @@ Opt("TrayAutoPause", 0)
 
 #EndRegion	; > SHORTCUTS
 #Region		;	CLEANUP
-	
+
 	Func _Cleanup()
 		Local $CleanupWindowsUpdate, $CleanupRecycleBin, $RecycleBinQuery
 		Local $WindowsUpdateDataPath = "C:\Windows\SoftwareDistribution"
@@ -828,7 +812,7 @@ Opt("TrayAutoPause", 0)
 
 #EndRegion	; > CLEANUP
 #Region		;	FLUSH
-	
+
 	Func _FlushDNS()
 		_FileWriteLog($Log, "[INFO] Flushing DNS and deleting ARP cache...")
 		Local $FlushDNS = RunWait(@ComSpec & ' /c ' & 'netsh int ip delete arpcache & ipconfig /flushdns', @ScriptDir, @SW_HIDE)
@@ -851,7 +835,7 @@ Opt("TrayAutoPause", 0)
 			If $IsLicensed Then Return SetError(1, 1, "Licensed")
 		$IsNotification = StringInStr($RunSLMGR, "License Status: Notification")
 			If $IsNotification Then Return SetError(0, 1, "Unlicensed")
-				
+
 		Return SetError(0, 1, "N/A")
 	EndFunc
 
@@ -870,7 +854,7 @@ Opt("TrayAutoPause", 0)
 
 #EndRegion	; > LICENSE
 #Region		;	PROCESSES
-	
+
 	Func Processes()
 		Local $dotNETopt = "mscorsvw.exe"
 		If ProcessExists($dotNETopt) Then
@@ -908,7 +892,7 @@ Opt("TrayAutoPause", 0)
 #Region		;	REPORTS
 
 	Func _SystemHealthReport()
-		
+
 	EndFunc
 
 	Func _ApplicationInstallsReport()
@@ -919,12 +903,12 @@ Opt("TrayAutoPause", 0)
 		Local $AppList, $AppInfo, $AppList_Full[0][2], $REG_Val, $REG_Data, $ArrayAdd, $NrOfInstalls = 0, $LatestInstallCount = 0
 		Local $DisplayNameIndex, $DisplayName, $VersionIndex, $Version, $InstallDateIndex, $InstallDate, $PublishedIndex, $Publisher
 		Local $UninstallIndex, $Uninstall, $DisplayIconIndex, $DisplayIcon, $DisplayIconAttrib, $InstallLocationIndex, $InstallLocation
-	
-	
+
+
 		; LIST APPS FROM THE REGISTRY
 		$AppList = _RegEnumKeyEx($InstalledAppsPath64)
 		$ItemsToDelete = _RegEnumKeyEx($InstalledAppsPath64, "", "*.KB*")
-	
+
 		If Not IsArray($AppList) Then
 			_FileWriteLog($Log, "[ERROR] Failed to list applications from the registry.")
 		Else
@@ -936,18 +920,18 @@ Opt("TrayAutoPause", 0)
 			Else
 				$NrOfInstalls = $AppList[0]
 			EndIf
-	
+
 			; CHECK FOR EXISTING REPORTS. RUN COMPARISON FROM LAST REPORT, IF FOUND.
 			$ApplicationsReports = _FileListToArray($AppReportsFolder, "Applications_*", 1)
 			If @error = 4 Then
 				_FileWriteLog($Log, "[INFO] No Applications Report has been created yet... Creating the first one.")
 			Else
 				; FIND THE LATEST REPORT SO THAT WE CAN COMPARE AMOUNT OF UPDATES
-				$LatestReport = _GetNewestFile($AppReportsFolder, 1)        
+				$LatestReport = _GetNewestFile($AppReportsFolder, 1)
 				$ApplicationsInLatestReport = FileReadLine($LatestReport, 8)
 				$LatestInstallCount = StringRegExpReplace($ApplicationsInLatestReport, '[^[:digit:]]', '')
 			EndIf
-	
+
 			; CREATE NEW REPORT
 			_FileWriteLog($Log, "[INFO] Creating a new Applications Report.")
 			$oFile = $AppReportsFolder & "Applications_" & @MDAY & "." & @MON & "." & @YEAR & ".txt"
@@ -962,7 +946,7 @@ Opt("TrayAutoPause", 0)
 			Else
 				_FileWriteLog($Log, "[INFO] Created file: " & $oFile)
 				$hFileOpen = FileOpen($oFile, $FO_APPEND)
-				
+
 				FileWrite($oFile, "====================================" & @CRLF)
 				FileWrite($oFile, "======= Applications Summary =======" & @CRLF)
 				FileWrite($oFile, "====================================" & @CRLF)
@@ -978,12 +962,12 @@ Opt("TrayAutoPause", 0)
 				FileWrite($oFile, @CRLF)
 				FileWrite($oFile, @CRLF)
 
-	
+
 				; WRITE CONTENT TO REPORT
 				For $i = 1 to UBound($AppList) - 1
 					$AppInfo = _RegEnumValEx($AppList[$i], 256, $AppInfoFilter)
 					_ArraySort($AppInfo, 0, 0, 0, 1)
-	
+
 					; CREATE VARIABLES
 					; + DISPLAYNAME
 					$DisplayNameIndex = _ArraySearch($AppInfo, "DisplayName")
@@ -991,14 +975,14 @@ Opt("TrayAutoPause", 0)
 						$DisplayName = $AppInfo[$DisplayNameIndex][3]
 						FileWrite($oFile, $DisplayName & @CRLF)
 					EndIf
-	
+
 					; + VERSION
 					$VersionIndex = _ArraySearch($AppInfo, "DisplayVersion")
 					If $VersionIndex >= 0 Then
 						$Version = $AppInfo[$VersionIndex][3]
 						FileWrite($oFile, "Version: " & $Version & @CRLF)
 					EndIf
-	
+
 					; + DISPLAY ICON
 					$DisplayIconIndex = _ArraySearch($AppInfo, "DisplayIcon")
 					If $DisplayIconIndex >= 0 Then
@@ -1008,7 +992,7 @@ Opt("TrayAutoPause", 0)
 						If StringInStr($DisplayIcon, "/") Then $DisplayIcon = StringReplace($DisplayIcon, '/', '\')
 						If Not FileExists($DisplayIcon) Then $DisplayIcon = "N/A"
 					EndIf
-	
+
 					; + INSTALL DATE
 					$InstallDateIndex = _ArraySearch($AppInfo, "InstallDate")
 					If $DisplayIcon <> "" Then
@@ -1029,7 +1013,7 @@ Opt("TrayAutoPause", 0)
 						$Publisher = $AppInfo[$PublishedIndex][3]
 						FileWrite($oFile, "Publisher: " & $Publisher & @CRLF)
 					EndIf
-	
+
 					; + INSTALL LOCATION
 					$InstallLocationIndex = _ArraySearch($AppInfo, "InstallLocation")
 					If $InstallLocationIndex >= 0 Then
@@ -1038,18 +1022,18 @@ Opt("TrayAutoPause", 0)
 							FileWrite($oFile, "Install Location: " & $InstallLocation & @CRLF)
 						EndIf
 					EndIf
-	
+
 					; + UNINSTALL STRING
 					$UninstallIndex = _ArraySearch($AppInfo, "UninstallString")
 					If $UninstallIndex >= 0 Then
 						$Uninstall = $AppInfo[$UninstallIndex][3]
 						FileWrite($oFile, "Uninstall String: " & $Uninstall & @CRLF)
 					EndIf
-	
+
 					If $DisplayNameIndex > 0 Then FileWrite($oFile, @CRLF)
 				Next
 				_FileWriteLog($Log, "[INFO] Successfully created report.")
-	
+
 			EndIf
 		EndIf
 	EndFunc
@@ -1059,26 +1043,26 @@ Opt("TrayAutoPause", 0)
 		Local $WindowsUpdateReports, $InstallDate, $HotFixID, $NrOfUpdates = 0, $NrOfNewUpdates = 0, $LatestReport
 		Local $ArrayAdd, $UpdatesInLatestReport, $LatestUpdateCount = 0
 		Local $DateArray[0][2]
-		
+
 
 		; WINDOWS UPDATE QUERY
 		$strQuery = "winmgmts:" & "{impersonationLevel=impersonate}!\\" & @ComputerName & "\root\cimv2"
 		$objWMIService = ObjGet($strQuery)
 		$colItems = $objWMIService.ExecQuery("Select * from win32_QuickFixEngineering")
-	
+
 		; CHECK FOR EXISTING REPORTS. RUN COMPARISON FROM LAST REPORT, IF FOUND.
 		$WindowsUpdateReports = _FileListToArray($UpdatesReportsFolder, "WindowsUpdates_*", 1)
 		If @error = 4 Then
 			_FileWriteLog($Log, "[INFO] No Windows Update Report has been created yet... Creating the first one.")
 		Else
 			; FIND THE LATEST REPORT SO THAT WE CAN COMPARE AMOUNT OF UPDATES
-			$LatestReport = _GetNewestFile($UpdatesReportsFolder, 1)        
+			$LatestReport = _GetNewestFile($UpdatesReportsFolder, 1)
 			$UpdatesInLatestReport = FileReadLine($LatestReport, 8)
 			$LatestUpdateCount = StringRegExpReplace($UpdatesInLatestReport, '[^[:digit:]]', '')
-	
+
 			_FileWriteLog($Log, "[INFO] Creating a new Windows Update Report.")
 		EndIf
-	
+
 		; CREATE NEW REPORT
 		$oFile = $UpdatesReportsFolder & "WindowsUpdates_" & @MDAY & "." & @MON & "." & @YEAR & ".txt"
 		If FileExists($oFile) Then
@@ -1087,7 +1071,7 @@ Opt("TrayAutoPause", 0)
 		Else
 			_FileCreate($oFile)
 		EndIf
-	
+
 		If @error Then
 			_FileWriteLog($Log, "[ERROR] Failed to create Windows Update Report.")
 		Else
@@ -1100,9 +1084,9 @@ Opt("TrayAutoPause", 0)
 			Else
 				_FileWriteLog($Log, "[INFO] Created file: " & $oFile)
 				$hFileOpen = FileOpen($oFile, $FO_APPEND)
-				
+
 				$NrOfUpdates = $colItems.Count
-	
+
 				FileWrite($oFile, "====================================" & @CRLF)
 				FileWrite($oFile, "====== Windows Update Summary ======" & @CRLF)
 				FileWrite($oFile, "====================================" & @CRLF)
@@ -1117,28 +1101,28 @@ Opt("TrayAutoPause", 0)
 				FileWrite($oFile, "Currently Installed Updates")
 				FileWrite($oFile, @CRLF)
 				FileWrite($oFile, @CRLF)
-	
+
 				; CREATE ARRAY
 				For $QFE in $colItems
 					$InstallDate = $QFE.InstalledOn
 					$ArrayAdd = $InstallDate & "|" & $QFE.HotfixID
 					_ArrayAdd($DateArray, $ArrayAdd)
 				Next
-	
+
 				; SORT ARRAY BY DATE
 				_ArraySort($DateArray, 1)
-	
+
 				; WRITE CONTENT TO REPORT
 				For $i = 0 to UBound($DateArray) - 1
 					$HotFixID = $DateArray[$i][1]
 					$InstallDate = _Date_Time_Convert($DateArray[$i][0], 'M/d/yyyy', 'd.M.yyyy') ; CONVERT DATE FORMAT
-	
+
 					FileWrite($oFile, $HotFixID & @CRLF)
 					FileWrite($oFile, "Install Date: " & $InstallDate & @CRLF)
 					FileWrite($oFile, @CRLF)
 				Next
 				_FileWriteLog($Log, "[INFO] Successfully created report.")
-	
+
 			EndIf
 		EndIf
 	EndFunc     ; > _WindowsUpdateReport()
@@ -1147,11 +1131,11 @@ Opt("TrayAutoPause", 0)
 #Region		;	AUTOPROVISION
 
 	Func _CreateScheduledTask()
-		
+
 	EndFunc
 
 	Func _CreateProvisioningScript()
-	
+
 	EndFunc
 
 #EndRegion	; > AUTOPROVISION
@@ -1162,7 +1146,7 @@ Opt("TrayAutoPause", 0)
 		Local $REG_WinlogonPath = $HKLM & "\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
 		Local $REG_RunOncePath = $HKLM & "\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
 		Local $DeScrambledPassword
-		
+
 		$ScrambledPassword = IniRead($Config, "AutoLogon", "Password", "N/A")
 		$DeScrambledPassword = _DeScramble($ScrambledPassword)
 
@@ -1200,7 +1184,7 @@ Opt("TrayAutoPause", 0)
 
 		; RUN PREPSERVER ONCE AFTER AUTO LOGON
 		RegWrite($REG_RunOncePath, 'PrepServer', 'REG_SZ', '"' & @ScriptFullPath & '"')
-		
+
 	EndFunc
 
 	Func _AutoLogonDisable()
@@ -1236,7 +1220,7 @@ Opt("TrayAutoPause", 0)
 #Region		;	CHANGE USER
 
 	Func _ChangeUser($uFlag = 0)
-		
+
 
 	EndFunc
 
@@ -1333,7 +1317,7 @@ Opt("TrayAutoPause", 0)
 		_BlockInputEx(0)
 		_Crypt_Shutdown()
 		_ClosePermissionResources()
-		
+
 		If $vParam = "shutdown" Then
 			_AutoLogonDisable()
 			_FileWriteLog($Log, "[END] Shutting down.")

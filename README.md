@@ -10,6 +10,10 @@ A tool to optimize virtual machines before provisioning.
 - Clears DNS- and Group Policy cache.
 - Automatically disables tasks and services.
 
+## Usage
+- Place **PrepServer.exe** on your VM.
+- When you're ready to shutdown, run **PrepServer.exe**.
+
 ## Preview
 PrepServer takes up the whole screen. **To exit, hit '_shift + alt + Q_'**.
 

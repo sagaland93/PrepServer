@@ -26,6 +26,14 @@ Again, use the hotkey to exit.
 
 If Autologon info is found in 'Config.ini', this will be written to the registry and used to sign in automatically after reboot.
 
+## Compile
+
+### **IMPORTANT**
+
+Copy ALL **au3** files from **_Includes_** and replace your existing ones, here:
+
+C:\Program Files (x86)\AutoIt3\Include
+
 ## Disclaimer
 Please note that this is a work-in-progress.
 

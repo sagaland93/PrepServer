@@ -30,3 +30,7 @@ If Autologon info is found in 'Config.ini', this will be written to the registry
 Please note that this is a work-in-progress.
 
 You will find bloated code and unnecessary/unused code and comments.
+
+## Credit
+There are some clever people in the AutoIt community.
+I've used a bunch of their code - and I got alot of inspiration from their work.

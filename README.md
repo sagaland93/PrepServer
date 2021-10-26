@@ -34,6 +34,12 @@ Copy ALL **au3** files from **_Includes_** and replace your existing ones, here:
 
 C:\Program Files (x86)\AutoIt3\Include
 
+Alternatively, you can point the script to Include from a different directory.
+
+The **au3** files from this repo may break other scripts.
+
+I'm considering changing this in the source code.
+
 ## Disclaimer
 Please note that this is a work-in-progress.
 
